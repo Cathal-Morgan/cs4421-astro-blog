@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
+import { getEntry, type CollectionEntry } from 'astro:content';
+import AuthorBio from '../components/AuthorBio.astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
@@ -8,7 +9,12 @@ import Header from '../components/Header.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, author } = Astro.props;
+const authorProfile = author ? await getEntry(author) : undefined;
+
+if (author && !authorProfile) {
+	throw new Error(`Author profile not found: ${author}`);
+}
 ---
 
 <html lang="en">
@@ -78,6 +84,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 						<hr />
 					</div>
 					<slot />
+					{authorProfile && <AuthorBio author={authorProfile.data} />}
 				</div>
 			</article>
 		</main>
