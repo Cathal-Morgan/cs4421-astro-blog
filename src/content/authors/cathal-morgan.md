@@ -1,6 +1,6 @@
 ---
-name: 'Alex Rivera'
-bio: 'Alex writes about thoughtful software design, accessible interfaces, and the tools that help small teams do their best work.'
+name: 'Cathal Morgan'
+bio: 'I exist sometimes and while I exist I listen to music.'
 avatar: '../../assets/blog-placeholder-about.jpg'
 socialLinks:
   - label: 'GitHub'
