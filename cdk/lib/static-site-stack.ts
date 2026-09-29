@@ -14,15 +14,12 @@ export class StaticSiteStack extends cdk.Stack {
     });
 
     const distribution = new cloudfront.Distribution(this, 'SiteDistribution', {
-      defaultBehavior: {
-        origin: new origins.S3Origin(siteBucket),
-        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-      },
-      defaultRootObject: 'index.html',
+    defaultBehavior: { origin: origins.S3BucketOrigin.withOriginAccessControl(siteBucket) },
+    defaultRootObject: 'index.html',
     });
 
     new s3deploy.BucketDeployment(this, 'DeploySite', {
-      sources: [s3deploy.Source.asset('./dist')],
+      sources: [s3deploy.Source.asset('./../dist')],
       destinationBucket: siteBucket,
       distribution,
       distributionPaths: ['/*'],
