@@ -6,7 +6,9 @@ export default [
   },
   ...eslintPluginAstro.configs["flat/recommended"],
   {
-    rules: {
+    rules: { "no-console": ["warn", { allow: ["warn", "error"] }],
+      "no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
+      "no-undef": "off",
     },
   },
 ]
