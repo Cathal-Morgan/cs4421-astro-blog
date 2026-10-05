@@ -13,9 +13,33 @@ export class StaticSiteStack extends cdk.Stack {
       autoDeleteObjects: true,
     });
 
+    const directoryIndexFunction = new cloudfront.Function(this, 'DirectoryIndexFunction', {
+      code: cloudfront.FunctionCode.fromInline(`function handler(event) {
+  var request = event.request;
+  var uri = request.uri;
+
+  if (uri.charAt(uri.length - 1) === '/') {
+    request.uri = uri + 'index.html';
+  } else {
+    var lastSegment = uri.substring(uri.lastIndexOf('/') + 1);
+    if (lastSegment.indexOf('.') === -1) {
+      request.uri = uri + '/index.html';
+    }
+  }
+
+  return request;
+}`),
+    });
+
     const distribution = new cloudfront.Distribution(this, 'SiteDistribution', {
-    defaultBehavior: { origin: origins.S3BucketOrigin.withOriginAccessControl(siteBucket) },
-    defaultRootObject: 'index.html',
+      defaultBehavior: {
+        origin: origins.S3BucketOrigin.withOriginAccessControl(siteBucket),
+        functionAssociations: [{
+          eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
+          function: directoryIndexFunction,
+        }],
+      },
+      defaultRootObject: 'index.html',
     });
 
     new s3deploy.BucketDeployment(this, 'DeploySite', {
