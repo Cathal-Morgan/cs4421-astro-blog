@@ -6,7 +6,8 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev",
+    "dev": "node scripts/open-cloudfront.mjs",
+    "dev:local": "astro dev",
     "build": "astro build",
     "check": "astro check",
     "preview": "astro preview",
