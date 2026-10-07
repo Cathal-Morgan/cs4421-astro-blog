@@ -34,4 +34,5 @@ jobs:
           aws-region: us-east-1
 
       - name: Deploy Infrastructure & Assets with AWS CDK
+        working-directory: ./cdk
         run: npx cdk deploy --require-approval never
