@@ -6,7 +6,8 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "node scripts/open-cloudfront.mjs",
+    "dev": "astro dev --open",
+    "dev:cloudfront": "node scripts/open-cloudfront.mjs",
     "dev:local": "astro dev",
     "build": "astro build",
     "check": "astro check",
@@ -17,7 +18,6 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.1",
-    "@astrojs/node": "^11.1.7",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "astro": "^7.3.2",
