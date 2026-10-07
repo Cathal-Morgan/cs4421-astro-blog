@@ -2,12 +2,20 @@
 
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+<<<<<<< Updated upstream
 import { defineConfig, fontProviders } from 'astro/config';
+=======
+import { defineConfig, fontProviders, logHandlers } from 'astro/config';
+>>>>>>> Stashed changes
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://example.com',
 	integrations: [mdx(), sitemap()],
+<<<<<<< Updated upstream
+=======
+	logger: logHandlers.json(),
+>>>>>>> Stashed changes
 	fonts: [
 		{
 			provider: fontProviders.local(),
@@ -32,4 +40,8 @@ export default defineConfig({
 			},
 		},
 	],
+<<<<<<< Updated upstream
 });
+=======
+});
+>>>>>>> Stashed changes
