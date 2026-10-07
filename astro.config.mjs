@@ -3,11 +3,12 @@
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders, logHandlers } from 'astro/config';
+import node from '@astrojs/node';
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://example.com',
-	output: 'static',
+	output: 'server',
 	integrations: [mdx(), sitemap()],
 	logger: logHandlers.json(),
 	fonts: [
@@ -34,4 +35,7 @@ export default defineConfig({
 			},
 		},
 	],
+	adapter: node({
+		mode: 'standalone',
+	}),
 });
