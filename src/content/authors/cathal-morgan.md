@@ -1,6 +1,6 @@
 ---
 name: 'Cathal Morgan'
-bio: 'I exist sometimes and while I exist I listen to music.'
+bio: 'Hey, thanks for listening to my ramblings.'
 avatar: '../../assets/blog-placeholder-about.jpg'
 socialLinks:
   - label: 'GitHub'
