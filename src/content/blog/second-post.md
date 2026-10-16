@@ -1,5 +1,5 @@
 ---
-title: 'August'
+title: 'August 2026'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 15 2022'
 galleryImages:

@@ -1,5 +1,5 @@
 ---
-title: 'July'
+title: 'July 2026'
 description: 'The start of something...'
 pubDate: 'Jul 08 2022'
 galleryImages:
