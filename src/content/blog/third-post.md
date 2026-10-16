@@ -1,8 +1,9 @@
 ---
-title: 'Third post'
+title: 'September'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 22 2022'
-heroImage: '../../assets/blog-placeholder-2.jpg'
+galleryImages:
+  - '../../assets/blog-placeholder-2.jpg'
 author: cathal-morgan
 ---
 
