@@ -5,10 +5,12 @@ import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders, logHandlers } from 'astro/config';
 import node from '@astrojs/node';
 
+const output = process.env.ASTRO_OUTPUT === 'static' ? 'static' : 'server';
+
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
-	output: 'server',
+	site: process.env.ASTRO_SITE_URL ?? 'https://d127tr8alg8p0n.cloudfront.net',
+	output,
 	integrations: [mdx(), sitemap()],
 	logger: logHandlers.json(),
 	fonts: [
@@ -35,7 +37,9 @@ export default defineConfig({
 			},
 		},
 	],
-	adapter: node({
-		mode: 'standalone',
+	...(output === 'server' && {
+		adapter: node({
+			mode: 'standalone',
+		}),
 	}),
 });
