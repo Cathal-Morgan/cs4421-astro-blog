@@ -18,7 +18,7 @@ const getSource = (image: Props['images'][number]) =>
 	isDescribedImage(image) ? image.src : image;
 const getDescription = (image: Props['images'][number]) =>
 	isDescribedImage(image) ? image.description : undefined;
-const firstSource = images.length > 0 ? getSource(images[0]) : undefined;
+const firstSource = images.length > 1 ? getSource(images[1]) : undefined;
 const widgetAspectRatio = !firstSource || typeof firstSource === 'string'
 	? 2
 	: firstSource.width / firstSource.height;

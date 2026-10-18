@@ -22,6 +22,9 @@ jobs:
 
       - name: Build Astro Static Site
         run: npm run build
+        env:
+          ASTRO_OUTPUT: static
+          ASTRO_SITE_URL: https://d127tr8alg8p0n.cloudfront.net
 
       - name: Change Directory to CDK Project
         run: cd cdk && npm ci

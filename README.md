@@ -55,6 +55,8 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
+The CloudFront deployment workflow builds a static site (`ASTRO_OUTPUT=static`) for S3. The default build uses the Node adapter for the Docker deployment.
+
 ## 👀 Want to learn more?
 
 Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
