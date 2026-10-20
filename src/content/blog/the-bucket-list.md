@@ -1,7 +1,7 @@
 ---
-title: 'The Bucket List'
+title: 'Intro and Bucket List'
 description: 'Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro.'
-pubDate: 'Jun 19 2024'
+pubDate: 'Sep 27 2026'
 galleryImages:
   - '../../assets/blog-placeholder-1.jpg'
   - src: 'https://lastfm.freetls.fastly.net/i/u/300x300/1319ef46e1da47f5c7dd7afdfb11aa53.png'
@@ -59,8 +59,7 @@ galleryImages:
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/1a1de088d31f4bd9bb0e06655cac2022.png'
     description: 'Blur - The Great Escape'
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/422ef247391e32a3214f89c831e2d7f7.png'
-    description: 'Coldplay - X And Y'
-  
+    description: 'Coldplay - X And Y' 
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/22580f866b994399a86449d97911643f.png'
     description: 'Incubus - S.C.I.E.N.C.E.'
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/69e9d04059b82eb67dffe732890b7887.png'
