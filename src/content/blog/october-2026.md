@@ -30,6 +30,10 @@ galleryImages:
     description: 'Electric Six - Fire'
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/ca1bb68cf031479fc762e07469cd1ca1.png'
     description: 'Royal Blood - Royal Blood'
+  - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/e432ae942d490229a895685390586044.png'
+    description: 'Fontaines D.C. - Dopamine Chamber'
+  - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/f8ac305316fc4fc9ad672a73ff943635.png'
+    description: 'Fountains of Wayne - Welcome Interstate Managers'
 author: cathal-morgan
 ---
 
