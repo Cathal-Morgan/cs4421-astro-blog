@@ -22,5 +22,10 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build -t $ECR_REGISTRY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY:$IMAGE_TAG
+       REPOSITORY_URI=$(aws cloudformation describe-stacks \
+          --stack-name EcrStack \
+          --region us-east-1 \
+          --query 'Stacks[0].Outputs[?OutputKey==`RepositoryUri`].OutputValue' \
+          --output text)
+        docker build -t "$REPOSITORY_URI:$IMAGE_TAG" .
+        docker push "$REPOSITORY_URI:$IMAGE_TAG"
