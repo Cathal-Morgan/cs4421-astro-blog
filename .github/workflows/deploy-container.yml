@@ -1,6 +1,6 @@
 name: Deploy Container to AWS
 on:
-  push:
+  pull_request:
     branches: [main]
 jobs:
   build-and-deploy:
@@ -22,5 +22,5 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build -t $ECR_REGISTRY/astro-blog:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/astro-blog:$IMAGE_TAG
+        docker build -t $ECR_REGISTRY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY:$IMAGE_TAG

@@ -63,7 +63,7 @@ npx cdk deploy EcsStack --parameters EcsStack:ImageTag=latest
 To deploy a specific version, push it under a unique tag, then use:
 
 ```sh
-npx cdk deploy EcsStack --parameters EcsStack:ImageTag=release-001
+npx.cmd cdk deploy EcsStack --parameters EcsStack:ImageTag=release-001
 ```
 
 Omitting `ImageTag` uses `latest` on initial deployment. CDK normally preserves
