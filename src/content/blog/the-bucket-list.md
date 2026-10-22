@@ -1,7 +1,7 @@
 ---
-title: 'The Bucket List'
+title: 'Intro and Bucket List'
 description: 'Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro.'
-pubDate: 'Jun 19 2024'
+pubDate: 'Sep 27 2026'
 galleryImages:
   - '../../assets/blog-placeholder-1.jpg'
   - src: 'https://lastfm.freetls.fastly.net/i/u/300x300/1319ef46e1da47f5c7dd7afdfb11aa53.png'
@@ -59,8 +59,7 @@ galleryImages:
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/1a1de088d31f4bd9bb0e06655cac2022.png'
     description: 'Blur - The Great Escape'
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/422ef247391e32a3214f89c831e2d7f7.png'
-    description: 'Coldplay - X And Y'
-  
+    description: 'Coldplay - X And Y' 
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/22580f866b994399a86449d97911643f.png'
     description: 'Incubus - S.C.I.E.N.C.E.'
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/69e9d04059b82eb67dffe732890b7887.png'
@@ -77,8 +76,6 @@ galleryImages:
     description: 'Temple of the Dog - Temple of the Dog'
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/d687203d464bc03721349d037d8a8588.png'
     description: 'Nine Inch Nails - Pretty Hate Machine'
-  - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/e432ae942d490229a895685390586044.png'
-    description: 'Fontaines D.C. - Dopamine Chamber'
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/6373e00a55bdbd68fe24369d2d05b2ee.png'
     description: 'Hole - Live Through This'
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/912efdc838584d69873450f9c1bfb033.png'
@@ -91,8 +88,6 @@ galleryImages:
     description: 'Los Campesinos! - Hold on Now, Youngster...'
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/fd7a92746faa7b8e9cf5f6c79718470b.png'
     description: 'The Story So Far - I Want to Disappear'
-  - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/f8ac305316fc4fc9ad672a73ff943635.png'
-    description: 'Fountains of Wayne - Welcome Interstate Managers'
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/daec432d5eed4381846b1fcc837a1278.png'
     description: 'The Cranberries - No Need to Argue'
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/3552d43e4309430995685f554f33a73e.png'
