@@ -1,0 +1,137 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Send a suggestion | ${SITE_TITLE}`} description="Send a private suggestion to the site owner." />
+		<style>
+			main {
+				max-width: 720px;
+			}
+			.suggestion-form {
+				display: grid;
+				gap: 0.75rem;
+				margin: 2rem 0;
+				padding: 1.25rem;
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 12px;
+				background: #fff;
+			}
+			.suggestion-form label {
+				font-weight: 700;
+			}
+			.suggestion-form input,
+			.suggestion-form textarea,
+			.suggestion-form button {
+				box-sizing: border-box;
+				width: 100%;
+				padding: 0.7rem;
+				border: 1px solid rgb(var(--gray));
+				border-radius: 6px;
+				font: inherit;
+			}
+			.suggestion-form textarea {
+				min-height: 8rem;
+				resize: vertical;
+			}
+			.suggestion-form button {
+				width: auto;
+				justify-self: start;
+				padding-inline: 1.25rem;
+				border: 0;
+				background: var(--accent);
+				color: #fff;
+				cursor: pointer;
+			}
+			.suggestion-form button:disabled {
+				cursor: wait;
+				opacity: 0.65;
+			}
+			.form-status {
+				min-height: 1.5em;
+				margin: 0;
+			}
+			.honeypot {
+				position: absolute;
+				left: -10000px;
+				width: 1px;
+				height: 1px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Send a suggestion</h1>
+			<p>
+				I use this site to catalogue my music taste and would love to hear your recommendations. Send
+				suggestions here and they will be delivered privately to me by email. Please do not include
+				sensitive or private information.
+			</p>
+
+			<form class="suggestion-form" id="suggestion-form">
+				<label for="suggestion-text">Your music suggestion</label>
+				<textarea
+					id="suggestion-text"
+					name="text"
+					required
+					minlength="10"
+					maxlength="1200"
+					placeholder="What would you like to suggest?"
+				></textarea>
+				<label for="suggestion-name">Display name (optional)</label>
+				<input id="suggestion-name" name="displayName" maxlength="60" autocomplete="nickname" />
+				<div class="honeypot" aria-hidden="true">
+					<label for="suggestion-website">Leave this field empty</label>
+					<input id="suggestion-website" name="website" tabindex="-1" autocomplete="off" />
+				</div>
+				<button type="submit">Send privately</button>
+				<p class="form-status" id="form-status" aria-live="polite"></p>
+			</form>
+		</main>
+		<Footer />
+		<script>
+			const form = document.querySelector<HTMLFormElement>('#suggestion-form');
+			const formStatus = document.querySelector<HTMLParagraphElement>('#form-status');
+			const submitButton = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+			if (form && formStatus && submitButton) {
+				form.addEventListener('submit', async (event) => {
+					event.preventDefault();
+					formStatus.textContent = '';
+					submitButton.disabled = true;
+
+					const formData = new FormData(form);
+					try {
+						const response = await fetch('/api/suggestions', {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({
+								text: formData.get('text'),
+								displayName: formData.get('displayName'),
+								website: formData.get('website'),
+							}),
+						});
+						const result: { message?: string; error?: string } = await response.json();
+						if (!response.ok) throw new Error(result.error ?? 'Your suggestion could not be submitted.');
+
+						form.reset();
+						formStatus.textContent = result.message ?? 'Thanks! Your suggestion was sent privately.';
+					} catch (error) {
+						formStatus.textContent =
+							error instanceof Error ? error.message : 'Your suggestion could not be submitted.';
+					} finally {
+						submitButton.disabled = false;
+					}
+				});
+			}
+
+		</script>
+	</body>
+</html>
