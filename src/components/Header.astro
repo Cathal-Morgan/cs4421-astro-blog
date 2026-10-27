@@ -10,6 +10,7 @@ import HeaderLink from './HeaderLink.astro';
 			<HeaderLink href="/">Home</HeaderLink>
 			<HeaderLink href="/blog">Blog</HeaderLink>
 			<HeaderLink href="/about">About</HeaderLink>
+			<HeaderLink href="/search">Search</HeaderLink>
 		</div>
 		<div class="social-links">
 			<a href="https://www.albumoftheyear.org/user/morgan-here/" target="_blank">
@@ -39,7 +40,7 @@ import HeaderLink from './HeaderLink.astro';
 	header {
 		margin: 0;
 		padding: 0 1em;
-		background: #bc51ff;
+		background: #c366fd;
 		box-shadow: 0 2px 8px rgba(var(--black), 5%);
 	}
 	h2 {
@@ -52,9 +53,18 @@ import HeaderLink from './HeaderLink.astro';
 		text-decoration: none;
 	}
 	nav {
-		display: flex;
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
 		align-items: center;
-		justify-content: space-between;
+	}
+	.internal-links {
+		grid-column: 2;
+		display: flex;
+		justify-content: center;
+	}
+	.social-links {
+		grid-column: 3;
+		justify-self: end;
 	}
 	nav a {
 		padding: 1em 0.5em;

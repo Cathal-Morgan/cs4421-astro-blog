@@ -139,6 +139,11 @@ hr {
   margin-bottom: 0;
 }
 
+.prose .Blank {
+	background: #ffffff;
+	border: 1px #000000 solid;
+}
+
 .prose .ITAOTS {
   background: #ECE4B4;
 }
@@ -149,6 +154,18 @@ hr {
 
 .prose .Oasis {
   background: #E2C286;
+}
+
+.prose .Disintegration {
+  background: #ACC7BB;
+}
+
+.prose .Toxicity {
+  background: #BC874E;
+}
+
+.prose .Currents {
+  background: #9977AB;
 }
 
 .sr-only {

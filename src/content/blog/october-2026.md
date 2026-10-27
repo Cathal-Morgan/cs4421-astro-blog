@@ -1,7 +1,7 @@
 ---
 title: 'October 2026'
-description: 'Lorem ipsum dolor sit amet'
-pubDate: 'Jun 01 2024'
+description: 'Hey this is where we are now!'
+pubDate: 'Oct 27 2026'
 galleryImages:
   - '../../assets/blog-placeholder-5.jpg'
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/67d337ea69460959f66ccc37f9fe626c.png'
