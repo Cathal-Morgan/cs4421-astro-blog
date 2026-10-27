@@ -1,7 +1,7 @@
 ---
 title: 'September 2026'
-description: 'Lorem ipsum dolor sit amet'
-pubDate: 'Jul 22 2022'
+description: 'A fresh new batch'
+pubDate: 'Sep 30 2026'
 galleryImages:
   - '../../assets/blog-placeholder-2.jpg'
   - src: 'https://lastfm-img.freetls.fastly.net/i/u/300x300/c90b758c227fb3e2c0926151542930db.png'

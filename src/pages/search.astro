@@ -1,0 +1,165 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Search | ${SITE_TITLE}`} description="Search blog posts." />
+		<style>
+			main {
+				max-width: 720px;
+			}
+			.search-form {
+				margin: 2rem 0;
+			}
+			.search-form label {
+				display: block;
+				margin-bottom: 0.5rem;
+				font-weight: 700;
+			}
+			.search-form input {
+				box-sizing: border-box;
+				width: 100%;
+				padding: 0.75rem;
+				border: 1px solid rgb(var(--gray));
+				border-radius: 6px;
+				font: inherit;
+			}
+			.sort-control {
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+				margin-top: 1rem;
+			}
+			.sort-control select {
+				padding: 0.5rem;
+				border: 1px solid #000;
+				border-radius: 6px;
+				font: inherit;
+			}
+			#search-results {
+				padding: 0;
+				list-style: none;
+			}
+			#search-results li {
+				margin: 1rem 0;
+				padding: 1rem;
+				border: 1px solid #000;
+				border-radius: 8px;
+				background: #ffffff;
+			}
+			#search-results a {
+				text-decoration: none;
+			}
+			#search-results a:hover h2 {
+				color: var(--accent);
+				text-decoration: underline;
+			}
+			#search-results h2 {
+				margin-bottom: 0.25rem;
+				font-size: 1.5rem;
+			}
+			.post-date {
+				margin: 0 0 0.5rem;
+				color: rgb(var(--gray));
+			}
+			.post-description {
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Search blog posts</h1>
+			<form class="search-form" role="search">
+				<label for="post-search">Search by title, description, or post text</label>
+				<input id="post-search" type="search" autocomplete="off" placeholder="Type to search..." />
+				<div class="sort-control">
+					<label for="post-sort">Sort by</label>
+					<select id="post-sort">
+						<option value="date-newest">Date (Newest)</option>
+						<option value="date-oldest">Date (Oldest)</option>
+						<option value="alphabetical">Title (A–Z)</option>
+					</select>
+				</div>
+			</form>
+			<p id="search-status" aria-live="polite">{posts.length} posts</p>
+			<ul id="search-results">
+				{
+					posts.map((post) => (
+						<li
+							data-search={`${post.data.title} ${post.data.description} ${post.body ?? ''}`}
+							data-title={post.data.title}
+							data-date={post.data.pubDate.valueOf()}
+						>
+							<a href={`/blog/${post.id}/`}>
+								<h2>{post.data.title}</h2>
+								<p class="post-date">
+									<FormattedDate date={post.data.pubDate} />
+								</p>
+								<p class="post-description">{post.data.description}</p>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+			<p id="no-results" hidden>No matching posts. Try another search.</p>
+		</main>
+		<Footer />
+		<script>
+			const searchForm = document.querySelector<HTMLFormElement>('.search-form');
+			const searchInput = document.querySelector<HTMLInputElement>('#post-search');
+			const sortSelect = document.querySelector<HTMLSelectElement>('#post-sort');
+			const results = document.querySelector<HTMLUListElement>('#search-results');
+			const status = document.querySelector<HTMLParagraphElement>('#search-status');
+			const noResults = document.querySelector<HTMLParagraphElement>('#no-results');
+
+			if (searchForm && searchInput && sortSelect && results && status && noResults) {
+				const posts = Array.from(results.querySelectorAll<HTMLLIElement>('li'));
+				searchForm.addEventListener('submit', (event) => event.preventDefault());
+				const updateResults = () => {
+					const query = searchInput.value.trim().toLocaleLowerCase();
+					const matchingPosts = posts.filter((post) =>
+						(post.dataset.search ?? '').toLocaleLowerCase().includes(query),
+					);
+					const matchingPostSet = new Set(matchingPosts);
+					for (const post of posts) {
+						post.hidden = !matchingPostSet.has(post);
+					}
+
+					matchingPosts.sort((a, b) => {
+						if (sortSelect.value === 'alphabetical') {
+							return (a.dataset.title ?? '').localeCompare(b.dataset.title ?? '', undefined, {
+								sensitivity: 'base',
+							});
+						}
+						const dateOrder = Number(a.dataset.date) - Number(b.dataset.date);
+						return sortSelect.value === 'date-oldest' ? dateOrder : -dateOrder;
+					});
+
+					for (const post of matchingPosts) {
+						results.append(post);
+					}
+
+					const resultCount = matchingPosts.length;
+					status.textContent = `${resultCount} ${resultCount === 1 ? 'post' : 'posts'}`;
+					noResults.hidden = resultCount > 0;
+				};
+
+				searchInput.addEventListener('input', updateResults);
+				sortSelect.addEventListener('change', updateResults);
+			}
+		</script>
+	</body>
+</html>

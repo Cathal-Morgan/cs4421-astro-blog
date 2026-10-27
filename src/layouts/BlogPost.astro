@@ -9,9 +9,11 @@ import PostImageGrid from '../components/PostImageGrid.astro';
 
 type Props = Omit<CollectionEntry<'blog'>['data'], 'author'> & {
 	author?: CollectionEntry<'blog'>['data']['author'];
+	previousPost?: { title: string; href: string };
+	nextPost?: { title: string; href: string };
 };
 
-const { title, description, pubDate, updatedDate, galleryImages, author } = Astro.props;
+const { title, description, pubDate, updatedDate, galleryImages, author, previousPost, nextPost } = Astro.props;
 const authorProfile = author ? await getEntry(author) : undefined;
 
 if (author && !authorProfile) {
@@ -55,6 +57,72 @@ if (author && !authorProfile) {
 			.last-updated-on {
 				font-style: italic;
 			}
+			.post-navigation {
+				display: flex;
+				align-items: stretch;
+				gap: 1rem;
+				margin-top: 3rem;
+				padding-top: 1rem;
+			}
+			.post-navigation > .paragraph-gradient {
+				display: flex;
+				flex: 1 1 0;
+				min-width: 0;
+				min-height: 6rem;
+				box-sizing: border-box;
+				margin: 0;
+			}
+			.post-navigation > .paragraph-gradient:only-child {
+				flex: 0 1 calc(50% - 0.5rem);
+			}
+			.post-navigation > .paragraph-gradient.next-post:only-child {
+				margin-left: auto;
+			}
+			.post-navigation a {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				width: 100%;
+				text-align: center;
+				text-decoration: none;
+			}
+			.post-navigation a:hover strong {
+				text-decoration: underline;
+			}
+			.post-navigation .next-post-link {
+				flex-direction: row;
+				align-items: center;
+				gap: 0.75rem;
+			}
+			.post-navigation .previous-post-link {
+				flex-direction: row;
+				align-items: center;
+				gap: 0.75rem;
+			}
+			.next-post-art {
+				flex: none;
+				margin: 0;
+				font-size: 5px;
+				line-height: 1.05;
+				text-align: left;
+			}
+			.previous-post-art {
+				flex: none;
+				margin: 0;
+				font-size: 2.5px;
+				line-height: 1.05;
+				text-align: left;
+			}
+			.next-post-text {
+				min-width: 0;
+				flex: 1;
+				text-align: center;
+			}
+			.post-navigation span {
+				display: block;
+				font-size: 0.8em;
+				color: rgb(var(--gray));
+			}
 		</style>
 	</head>
 
@@ -81,7 +149,68 @@ if (author && !authorProfile) {
 						<hr />
 					</div>
 					<slot />
+
 					{authorProfile && <AuthorBio author={authorProfile.data} />}
+					{
+						(previousPost || nextPost) && (
+							<nav class="post-navigation" aria-label="Blog post navigation">
+								{previousPost && (
+									<div class="paragraph-gradient Blank previous-post">
+										<a class="previous-post-link" href={previousPost.href}>
+											<span class="next-post-text">
+												<span>&lt;----- Previous post</span>
+												<strong>{previousPost.title}</strong>
+											</span>
+											<pre class="previous-post-art" aria-hidden="true">{`⠀⠀⠀⠀⠀⠀⠀
+		⢀⣤⠖⠂⠉⠉⠉⠀⠒⠤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⢀⠀⣶⡟⢀⣴⣶⣿⣾⣶⣶⣄⡀⠈⠑⢤⡀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⡴⣫⣼⡿⣴⡟⠛⠉⠉⠛⠛⠿⣿⣿⣷⣦⡀⠙⢄⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⣼⢁⣟⡟⣷⠁⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣷⣆⠈⢣⡀⠀⠀⠀⠀⠀
+⠀⢰⣿⢼⣿⣷⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⡆⠀⢱⠀⠀⠀⠀⠀
+⠀⢸⡵⣾⣇⣸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣧⠀⠀⢧⠀⠀⠀⠀
+⠀⠘⣴⣿⢯⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⡿⠛⠉⠹⡆⠀⠀⠀
+⢀⣼⣿⣧⠟⠁⢀⢀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢯⣴⣶⣴⡇⠀⠀⠀
+⢸⣿⣼⣿⣋⣉⠀⠀⠀⠈⠙⠦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣿⣷⣷⡀⠀⠀
+⢸⠁⠊⣿⠛⢛⢟⣦⡀⠀⠀⠀⠈⢆⠀⠀⠀⠀⢀⠔⣨⣶⡜⠂⠈⠽⣧⡀⠀
+⠸⣶⣾⡯⠤⢄⡀⠵⢿⣦⡀⠀⠀⠀⡷⡄⠀⡰⢁⣾⣿⣿⣿⠀⠀⠀⣿⡹⡄
+⠀⣿⣡⠦⢄⡀⠈⠳⣬⣹⣿⣆⠀⠀⢉⠻⣴⠇⣾⣿⡟⢻⠁⠀⠀⠀⣿⠁⡇
+⠀⣿⡭⡀⠀⠈⠲⣦⣸⣿⣿⣿⣧⣀⠈⡔⣜⣴⣿⡟⢀⡎⡈⠀⠀⢰⡿⢠⣷
+⠀⢸⣿⣄⣒⡀⡀⣿⣷⡿⣿⢿⣿⣷⡰⡸⣯⣏⣿⡷⢋⣼⣁⡢⢠⠟⠀⣼⣿
+⠀⠀⠻⣷⣈⣁⣮⢻⢸⡇⢨⣿⣿⣿⣷⢶⣿⣏⣩⣶⣿⣿⣿⣿⡯⣤⣴⣿⠃
+⠀⠀⠀⠘⠿⣿⣿⣽⣽⣷⣿⣿⣿⣿⣿⡶⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠁⠀
+⠀⠀⠀⠀⠀⠀⠉⠙⠿⢿⣿⣿⣿⣿⠟⠁⠀⠘⠿⣿⣿⣿⠿⠟⠉⠀⠀⠀⠀`}</pre>
+										</a>
+									</div>
+								)}
+								{nextPost && (
+									<div class="paragraph-gradient Blank next-post">
+										<a class="next-post-link" href={nextPost.href}>
+											<pre class="next-post-art" aria-hidden="true">{`⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⣼⣿⣿⣦⠀⠀⠀
+⠀⠀⠀⠀⠀⢰⣿⠁⠀⢹⡄⠀⠀
+⠀⠀⠀⠀⠀⢸⣿⠀⠀⣾⡇⠀⠀
+⠀⠀⠀⠀⠀⠈⣿⢀⣾⣿⠀⠀⠀
+⠀⠀⠀⠀⠀⣀⣿⣿⣿⠃⠀⠀⠀
+⠀⠀⠀⣠⣾⣿⣿⡟⠁⠀⠀⠀⠀
+⠀⢠⣾⣿⠟⠁⠘⡇⠀⠀⠀⠀⠀
+⢀⣿⡟⠁⠀⣠⣶⣿⣶⣶⣤⡀⠀
+⢸⣿⠀⠀⣼⣿⠟⢻⡛⠛⣿⣷⠀
+⠘⣿⡀⠀⢹⣇⠀⠘⡇⠀⠘⣿⠇
+⠀⠙⣷⡄⠀⠙⠂⠀⣷⠀⣸⡟⠀
+⠀⠀⠈⠙⠷⢦⣤⣤⣼⡞⠋⠀⠀
+⠀⠀⠀⠀⢀⣀⡀⠀⠸⡇⠀⠀⠀
+⠀⠀⠀⠀⣿⣿⣿⠀⢠⡇⠀⠀⠀
+⠀⠀⠀⠀⠈⠛⠷⠖⠋⠀⠀⠀⠀`}</pre>
+											<span class="next-post-text">
+												<span>Next post -----&gt;</span>
+												<strong>{nextPost.title}</strong>
+											</span>
+										</a>
+									</div>
+								)}
+							</nav>
+						)
+					}
 				</div>
 			</article>
 		</main>
