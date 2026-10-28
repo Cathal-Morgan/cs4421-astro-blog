@@ -1,7 +1,7 @@
 ---
 name: 'Cathal Morgan'
 bio: 'Hey, thanks for listening to my ramblings.'
-avatar: '../../assets/itme.jpeg'
+avatar: '../../assets/blog-placeholder-about.jpg'
 socialLinks:
   - label: 'Checkout my GitHub'
     url: 'https://github.com/Cathal-Morgan'
