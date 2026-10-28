@@ -1,11 +1,9 @@
 import * as cdk from 'aws-cdk-lib';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
-import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as ecsPatterns from 'aws-cdk-lib/aws-ecs-patterns';
-import * as iam from 'aws-cdk-lib/aws-iam';
 import * as logs from 'aws-cdk-lib/aws-logs';
 
 export class EcrStack extends cdk.Stack {
@@ -40,22 +38,6 @@ export class EcsStack extends cdk.Stack {
       description: 'Tag of the x86-64 application image in the ECR repository.',
     });
 
-    const suggestionsToEmail = new cdk.CfnParameter(this, 'SuggestionsToEmail', {
-      type: 'String',
-      minLength: 5,
-      allowedPattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$',
-      constraintDescription: 'Enter a valid recipient email address.',
-      description: 'Email address that receives private suggestions.',
-    });
-
-    const suggestionsFromEmail = new cdk.CfnParameter(this, 'SuggestionsFromEmail', {
-      type: 'String',
-      minLength: 5,
-      allowedPattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$',
-      constraintDescription: 'Enter a valid SES-verified sender email address.',
-      description: 'SES-verified sender email address in this AWS region.',
-    });
-
     const vpc = new ec2.Vpc(this, 'Vpc', {
       maxAzs: 2,
       natGateways: 0,
@@ -65,13 +47,6 @@ export class EcsStack extends cdk.Stack {
     const logGroup = new logs.LogGroup(this, 'ApplicationLogs', {
       retention: logs.RetentionDays.ONE_WEEK,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
-    });
-
-    const suggestionsTable = new dynamodb.Table(this, 'SuggestionsTable', {
-      partitionKey: { name: 'itemId', type: dynamodb.AttributeType.STRING },
-      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
-      timeToLiveAttribute: 'expiresAt',
     });
 
     const certificate = props.certificateArn
@@ -94,38 +69,10 @@ export class EcsStack extends cdk.Stack {
       taskImageOptions: {
         image: ecs.ContainerImage.fromEcrRepository(props.repository, imageTag.valueAsString),
         containerPort: 4321,
-        environment: {
-          NODE_ENV: 'production',
-          HOST: '0.0.0.0',
-          PORT: '4321',
-          SUGGESTIONS_TABLE_NAME: suggestionsTable.tableName,
-          SUGGESTIONS_TO_EMAIL: suggestionsToEmail.valueAsString,
-          SUGGESTIONS_FROM_EMAIL: suggestionsFromEmail.valueAsString,
-        },
+        environment: { NODE_ENV: 'production', HOST: '0.0.0.0', PORT: '4321' },
         logDriver: ecs.LogDrivers.awsLogs({ streamPrefix: 'astro', logGroup }),
       },
     });
-
-    service.taskDefinition.taskRole.addToPrincipalPolicy(
-      new iam.PolicyStatement({
-        actions: ['dynamodb:UpdateItem'],
-        resources: [suggestionsTable.tableArn],
-      }),
-    );
-
-    service.taskDefinition.taskRole.addToPrincipalPolicy(
-      new iam.PolicyStatement({
-        actions: ['ses:SendEmail'],
-        resources: [
-          cdk.Stack.of(this).formatArn({
-            service: 'ses',
-            resource: 'identity',
-            resourceName: suggestionsFromEmail.valueAsString,
-            arnFormat: cdk.ArnFormat.SLASH_RESOURCE_NAME,
-          }),
-        ],
-      }),
-    );
 
     service.targetGroup.configureHealthCheck({
       path: '/api/health/ready',
