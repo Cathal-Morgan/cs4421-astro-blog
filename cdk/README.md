@@ -17,9 +17,6 @@ unchanged; CDK also deploys its dependency, `EcrStack`, when needed.
 - CloudWatch application logs retained for seven days and deleted with the stack.
 - Application image pulled from `EcrStack.repository`. CDK grants the task
 	execution role pull access to that repository automatically.
-- Suggestions are emailed privately using Amazon SES. A small on-demand
-	DynamoDB table stores hashed rate-limit counters only; the ECS task can
-	update those counters and send email from the configured SES identity.
 - CloudFormation parameter `ImageTag` selects the image tag and defaults to
 	`latest` on initial deployment. Build and push a `linux/amd64` image before
 	deploying the ECS service. CDK no longer builds or publishes the image.
@@ -78,28 +75,6 @@ force a new ECS service deployment after pushing.
 By default the ALB serves HTTP on port 80 for initial lab testing. Use the
 `LoadBalancerDnsName` stack output to visit the site.
 
-## Private Suggestions
-
-The Suggestions page emails submissions to the address provided during ECS
-deployment. The API limits each source address to five submissions per hour,
-uses a hidden honeypot field, and does not store suggestion content. DynamoDB
-stores only hashed rate-limit counters and expires them automatically.
-
-Before deployment, verify the sender email address as an identity in Amazon SES
-in `us-east-1`. If the SES account is still in its sandbox, verify the recipient
-email address too or request production access. Then deploy with:
-
-```sh
-npx cdk deploy EcsStack \
-  --parameters EcsStack:ImageTag=latest \
-  --parameters EcsStack:SuggestionsToEmail=RECIPIENT_EMAIL \
-  --parameters EcsStack:SuggestionsFromEmail=VERIFIED_SES_SENDER_EMAIL
-```
-
-Replace the email placeholders with the actual addresses. SES and DynamoDB
-usage may incur charges; review current pricing and configure an AWS budget
-alert.
-
 ## HTTPS
 
 For a public site, supply an existing ACM certificate ARN in the same region:
@@ -125,8 +100,7 @@ npx cdk destroy EcsStack
 ```
 
 Destroying this stack removes the service, ALB, networking and application logs.
-The rate-limit table is retained. It does not remove the repository or static
-site stack. Destroy `EcsStack` before `EcrStack` because the service imports
-the repository's attributes.
+It does not remove the repository or static site stack. Destroy `EcsStack`
+before `EcrStack` because the service imports the repository's attributes.
 The repository has a destroy removal policy, but ECR blocks deletion while
 images remain; remove images deliberately before destroying the repository.
